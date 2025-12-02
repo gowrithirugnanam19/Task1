@@ -6,6 +6,15 @@ private String scheduleID;
 private String name;
 private int age;
 private String gender;
+
+public PassengerBean(String reservationID, String scheduleID, String name, int age, String gender){
+	this.reservationID = reservationID;
+	this.scheduleID = scheduleID;
+	this.name = name;
+	this.age = age;
+	this.gender = gender;
+	
+}
 public String getReservationID() {
 	return reservationID;
 }

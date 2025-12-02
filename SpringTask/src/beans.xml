@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+<!-- MessageService Bean -->
+<bean id="messageService" class="com.example.MessageService" />
+<!-- UserController Bean using Constructor Injection -->
+<bean id="userControllerConstructor" class="com.example.UserController">
+<constructor-arg ref="messageService" />
+</bean>
+<!-- UserController Bean using Setter Injection -->
+<bean id="userControllerSetter" class="com.example.UserController">
+<property name="messageService" ref="messageService" />
+</bean>
+<!-- UserController Bean using Field Injection -->
+<bean id="userControllerField" class="com.example.UserController">
+<property name="fieldMessageService" ref="messageService" />
+</bean>
+</beans>

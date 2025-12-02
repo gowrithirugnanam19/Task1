@@ -1,7 +1,7 @@
 package com.ex.dao;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.ArrayList.*;
+//import java.util.ArrayList.*;
 import com.ex.bean.EmployeeBean;
 public class AdminDao {
 public static Connection con=getCon();

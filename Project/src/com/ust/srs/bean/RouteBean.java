@@ -6,6 +6,15 @@ private String source;
 private String destination;
 private String travelDuration;
 private double fare;
+public RouteBean(String routeID, String source, String destination, String travelDuration, double fare) {
+	super();
+	this.routeID = routeID;
+	this.source = source;
+	this.destination = destination;
+	this.travelDuration = travelDuration;
+	this.fare = fare;
+}
+
 public String getRouteID() {
 	return routeID;
 }

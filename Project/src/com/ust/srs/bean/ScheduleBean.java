@@ -4,7 +4,16 @@ public class ScheduleBean {
 private String scheduleID;
 private String shipID;
 private String routeID;
-private String startDate ;
+private String startDate;
+
+public ScheduleBean(String scheduleID, String shipID, String routeID, String startDate) {
+	super();
+	this.scheduleID = scheduleID;
+	this.shipID = shipID;
+	this.routeID = routeID;
+	this.startDate = startDate;
+}
+
 public String getScheduleID() {
 	return scheduleID;
 }

@@ -27,7 +27,7 @@ public class Table {
 //	}	
 //}
 	
-	public static synchronized void print(int x) { 
+	public static synchronized void print(int x) { //static level sync
 		for(int i=1;i<=5;i++) {             
 			System.out.println(i*x);         
 			try {                           

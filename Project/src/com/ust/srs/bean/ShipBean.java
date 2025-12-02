@@ -4,6 +4,15 @@ private String shipID;
 private String shipName;
 private int seatingCapacity;
 private int reservationCapacity;
+
+public ShipBean(String shipID, String shipName, int seatingCapacity, int reservationCapacity) {
+	super();
+	this.shipID = shipID;
+	this.shipName = shipName;
+	this.seatingCapacity = seatingCapacity;
+	this.reservationCapacity = reservationCapacity;
+}
+
 public String getShipID() {
 	return shipID;
 }

@@ -1,3 +1,94 @@
+package com.ust.srs.ui;
+import javax.swing.*;
+
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.util.Test;
+
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Map;
+
+
+public class Login {
+	
+	private CredentialsBean loggedInUser = null;
+	
+	
+	public CredentialsBean getLoggedInUser() {
+		while(loggedInUser == null) {
+			System.out.println("");
+			
+		}
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(CredentialsBean loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
+
+	public void performLogin() {
+		
+		Test t = new Test();
+		
+		t.initializeData();
+		
+        JFrame frame = new JFrame("BookWave");
+        JPanel p = new JPanel();
+        
+        
+ 
+        JLabel label = new JLabel("BookWave");
+
+        frame.add(label);
+
+        frame.setSize(500, 600);
+        
+        JTextField userIDField = new JTextField("UserID",10);
+        
+        JPasswordField passwordField = new JPasswordField("", 10);
+        passwordField.setEchoChar('*');
+        
+        JButton loginButton = new JButton("Login");
+     
+        loginButton.addActionListener(new ActionListener(){
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		
+                String userID = userIDField.getText().trim();
+                String userPassword = passwordField.getText().trim();
+                
+                for(CredentialsBean credential : Test.credbean) {
+                	if(credential.getUserID().equals(userID) && credential.getPassword().equals(userPassword)) {
+                		
+                		credential.setLoginStatus(1);
+                		System.out.println("Welcome");
+                		loggedInUser = credential;
+                		frame.dispose();
+                		return;	
+                	}
+                }
+                System.out.println("Invalid userid or password");
+
+              }
+        	}
+        );
+        
+        p.add(label);
+        p.add(userIDField);
+        p.add(passwordField);
+        p.add(loginButton);
+        
+        frame.add(p);
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setVisible(true);
+	}
+	
+}
+
+
+
 //package com.ust.srs.ui;
 //import com.ust.srs.dao.AdministratorDAO;
 //

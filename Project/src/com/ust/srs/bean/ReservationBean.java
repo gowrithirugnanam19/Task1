@@ -9,6 +9,20 @@ private String journeyDate;
 private int noOfSeats;
 private double totalfare;
 private String bookingStatus;
+
+public ReservationBean(String reservationID, String scheduleID, String userID, String bookingDate,
+		String journeyDate, int noOfSeats, double totalFare, String bookingStatus) {
+	super();
+	this.reservationID = reservationID;
+	this.scheduleID = scheduleID;
+	this.userID = userID;
+	this.bookingDate = bookingDate;
+	this.journeyDate = journeyDate;
+	this.noOfSeats = noOfSeats;
+	this.totalfare = totalFare;
+	this.bookingStatus = bookingStatus;
+}
+
 public String getReservationID() {
 	return reservationID;
 }
