@@ -1,0 +1,5 @@
+package com.ust.srs.dao;
+
+public class AdministratorDAO {
+  
+}

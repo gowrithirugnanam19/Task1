@@ -1,0 +1,105 @@
+package com.ust.srs.ui;
+import javax.swing.*;
+import java.sql.*;
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.util.DB;
+
+public class Login {
+
+    public static void main(String[] args) {
+        // Show initial options: Login, Register, or Exit using JOptionPane
+        String[] options = {"Login", "Register", "Exit"};
+        int choice = JOptionPane.showOptionDialog(null, "Welcome to SeaRide! Please select an option:",
+                "SeaRide Login", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
+        switch (choice) {
+            case 0: // Login
+                handleLogin();
+                break;
+            case 1: // Register (You can implement registration logic here)
+                break;
+            case 2: // Exit
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Handle login process using JOptionPane
+    private static void handleLogin() {
+        // Prompt for UserID and Password
+        String userID = JOptionPane.showInputDialog("Enter UserID:");
+        if (userID == null) return; // If user cancels, return
+
+        String password = JOptionPane.showInputDialog("Enter Password:");
+        if (password == null) return; // If user cancels, return
+
+        // Authenticate credentials with database
+        CredentialsBean user = authenticate(userID, password);
+
+        if (user != null) {
+            // Successfully logged in, display the result
+            JOptionPane.showMessageDialog(null, "Login Successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+            if (user.getUserType().equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Welcome Admin!", "Admin", JOptionPane.INFORMATION_MESSAGE);
+                // You can display admin details here (not implemented)
+            } else if (user.getUserType().equals("customer")) {
+                JOptionPane.showMessageDialog(null, "Welcome Customer!", "Customer", JOptionPane.INFORMATION_MESSAGE);
+                // You can display customer details here (not implemented)
+            }
+            // Update loginStatus to 1 (logged in)
+            updateLoginStatus(userID, 1);
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid credentials. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Authenticate user by checking credentials in the database
+    private static CredentialsBean authenticate(String userID, String password) {
+        CredentialsBean user = null;
+        try {
+            // Prepare SQL query to check credentials
+            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, userID);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            // If a record exists, set the user details
+            if (rs.next()) {
+                user = new CredentialsBean();
+                user.setUserID(rs.getString("userID"));
+                user.setPassword(rs.getString("password"));
+                user.setUserType(rs.getString("userType"));
+                user.setLoginStatus(rs.getInt("loginStatus"));
+
+                // Check if already logged in (loginStatus = 1)
+                if (user.getLoginStatus() == 1) {
+                    JOptionPane.showMessageDialog(null, "User already logged in. Please log out first.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null; // Cannot login again if already logged in
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
+    }
+
+    // Update loginStatus to 1 (logged in)
+    private static void updateLoginStatus(String userID, int status) {
+        try {
+            String query = "UPDATE credentials SET loginStatus = ? WHERE userID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating login status: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+

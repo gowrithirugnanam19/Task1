@@ -1,0 +1,267 @@
+package com.ust.srs.ui;
+
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.bean.ShipBean;
+import com.ust.srs.util.DB;
+import com.ust.srs.dao.AdministratorDAO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Admin {
+    
+    private static AdministratorDAO adminDao = new AdministratorDAO();
+    
+    public static void main(String[] args) {
+        // Show the login dialog first
+        showLoginDialog();
+    }
+
+    // Show the login dialog
+    private static void showLoginDialog() {
+        JFrame loginFrame = new JFrame("Admin Login");
+        loginFrame.setSize(300, 150);
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setLayout(new GridLayout(3, 2));
+        
+        // Create login components
+        JLabel userLabel = new JLabel("User ID:");
+        JTextField userField = new JTextField();
+        JLabel passLabel = new JLabel("Password:");
+        JPasswordField passField = new JPasswordField();
+        JButton loginButton = new JButton("Login");
+
+        // Add components to the login frame
+        loginFrame.add(userLabel);
+        loginFrame.add(userField);
+        loginFrame.add(passLabel);
+        loginFrame.add(passField);
+        loginFrame.add(loginButton);
+
+        loginFrame.setVisible(true);
+
+        // Add action listener for the login button
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String userID = userField.getText();
+                String password = new String(passField.getPassword());
+
+                if (authenticateAdmin(userID, password)) {
+                    // If login is successful, hide the login frame and show admin operations
+                    loginFrame.dispose();  // Close the login window
+                    showAdminOperations();
+                } else {
+                    JOptionPane.showMessageDialog(loginFrame, "Invalid User ID or Password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+    // Validate admin login from MySQL
+    private static boolean authenticateAdmin(String userID, String password) {
+        try {
+            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ? AND userType = 'A'";  // 'A' for Admin
+            var con = DB.getCon();
+            var ps = con.prepareStatement(query);
+            ps.setString(1, userID);
+            ps.setString(2, password);
+            var rs = ps.executeQuery();
+            
+            return rs.next(); // If there is a matching admin record
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    // After successful login, show admin operations
+    private static void showAdminOperations() {
+        JFrame frame = new JFrame("Admin Operations");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.setLayout(new GridLayout(6, 2)); // Create a grid for buttons (6 rows, 2 columns)
+
+        // Add buttons for all the Admin operations
+        JButton addShipButton = new JButton("AD-001 Add Ship");
+        JButton deleteShipButton = new JButton("AD-002 Delete Ship");
+        JButton viewShipButton = new JButton("AD-003 View Ship");
+        JButton modifyShipButton = new JButton("AD-004 Modify Ship");
+        JButton addRouteButton = new JButton("AD-005 Add Route");
+        JButton deleteRouteButton = new JButton("AD-006 Delete Route");
+        JButton viewRouteButton = new JButton("AD-007 View Route");
+        JButton modifyRouteButton = new JButton("AD-008 Modify Route");
+        JButton addScheduleButton = new JButton("AD-009 Add Schedule");
+        JButton deleteScheduleButton = new JButton("AD-010 Delete Schedule");
+        JButton viewScheduleButton = new JButton("AD-011 View Schedule");
+        JButton modifyScheduleButton = new JButton("AD-012 Modify Schedule");
+        JButton viewPassengersButton = new JButton("AD-013 View Passenger");
+
+        // Add all buttons to the frame
+        frame.add(addShipButton);
+        frame.add(deleteShipButton);
+        frame.add(viewShipButton);
+        frame.add(modifyShipButton);
+        frame.add(addRouteButton);
+        frame.add(deleteRouteButton);
+        frame.add(viewRouteButton);
+        frame.add(modifyRouteButton);
+        frame.add(addScheduleButton);
+        frame.add(deleteScheduleButton);
+        frame.add(viewScheduleButton);
+        frame.add(modifyScheduleButton);
+        frame.add(viewPassengersButton);
+
+        // Set up action listeners for each button
+        addShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addShipDetails();
+            }
+        });
+
+        deleteShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteShipDetails();
+            }
+        });
+
+        viewShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewShipDetails();
+            }
+        });
+
+        modifyShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyShipDetails();
+            }
+        });
+
+        addRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addRouteDetails();
+            }
+        });
+
+        deleteRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteRouteDetails();
+            }
+        });
+
+        viewRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewRouteDetails();
+            }
+        });
+
+        modifyRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyRouteDetails();
+            }
+        });
+
+        addScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addScheduleDetails();
+            }
+        });
+
+        deleteScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteScheduleDetails();
+            }
+        });
+
+        viewScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewScheduleDetails();
+            }
+        });
+
+        modifyScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyScheduleDetails();
+            }
+        });
+
+        viewPassengersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewPassengers();
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    // Example method for adding ship details
+    private static void addShipDetails() {
+        String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+        String shipName = JOptionPane.showInputDialog("Enter Ship Name:");
+        int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Seating Capacity:"));
+        int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Reservation Capacity:"));
+
+        ShipBean shipBean = new ShipBean();
+        shipBean.setShipID(shipID);
+        shipBean.setShipName(shipName);
+        shipBean.setSeatingCapacity(seatingCapacity);
+        shipBean.setReservationCapacity(reservationCapacity);
+
+        String result = adminDao.addShip(shipBean);
+        JOptionPane.showMessageDialog(null, result);
+
+        // Check in MySQL after adding
+        viewShipDetails();
+    }
+
+    // Method to delete ship details
+    private static void deleteShipDetails() {
+        String shipID = JOptionPane.showInputDialog("Enter Ship ID to delete:");
+        ArrayList<String> shipIds = new ArrayList<>();
+        shipIds.add(shipID);
+
+        int count = adminDao.removeShip(shipIds);
+        if (count > 0) {
+            JOptionPane.showMessageDialog(null, "Ship deleted successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to delete ship.");
+        }
+
+        // Check in MySQL after deleting
+        viewShipDetails();
+    }
+
+    // Method to view ship details
+    private static void viewShipDetails() {
+        // Retrieve and show all ships
+        ArrayList<ShipBean> ships = adminDao.viewByAllShips();
+        StringBuilder shipDetails = new StringBuilder();
+        for (ShipBean ship : ships) {
+            shipDetails.append(ship.toString()).append("\n");
+        }
+
+        if (shipDetails.length() > 0) {
+            JOptionPane.showMessageDialog(null, "Ship Details: \n" + shipDetails);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ships available.");
+        }
+    }
+
+    // Similar methods for other operations (add route, delete route, etc.) can be written here
+}
+

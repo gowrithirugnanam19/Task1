@@ -1,0 +1,211 @@
+package com.ust.srs.dao;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import com.ust.srs.bean.PassengerBean;
+import com.ust.srs.bean.RouteBean;
+import com.ust.srs.bean.ScheduleBean;
+import com.ust.srs.bean.ShipBean;
+import com.ust.srs.service.Administrator;
+import com.ust.srs.util.DB;
+
+public class AdministratorDAO implements Administrator {
+
+    @Override
+    public String addShip(ShipBean shipbean) {
+        String result = "Ship could not be added.";
+        try {
+            String query = "INSERT INTO ship (shipID, shipName, seatingCapacity, reservationCapacity) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, shipbean.getShipID());
+            ps.setString(2, shipbean.getShipName());
+            ps.setInt(3, shipbean.getSeatingCapacity());
+            ps.setInt(4, shipbean.getReservationCapacity());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                result = "Ship added successfully.";
+            }
+        } catch (SQLException e) {
+            result = "Error adding ship: " + e.getMessage();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean modifyShip(ShipBean shipbean) {
+        boolean isModified = false;
+        try {
+            String query = "UPDATE ship SET shipName = ?, seatingCapacity = ?, reservationCapacity = ? WHERE shipID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, shipbean.getShipName());
+            ps.setInt(2, shipbean.getSeatingCapacity());
+            ps.setInt(3, shipbean.getReservationCapacity());
+            ps.setString(4, shipbean.getShipID());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                isModified = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isModified;
+    }
+
+    @Override
+    public int removeShip(ArrayList<String> shipIds) {
+        int removedCount = 0;
+        try {
+            String query = "DELETE FROM ship WHERE shipID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            
+            for (String shipId : shipIds) {
+                ps.setString(1, shipId);
+                removedCount += ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return removedCount;
+    }
+
+    @Override
+    public String addSchedule(ScheduleBean schedulebean) {
+        String result = "Schedule could not be added.";
+        try {
+            String query = "INSERT INTO schedule (scheduleID, shipID, routeID, startDate) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, schedulebean.getScheduleID());
+            ps.setString(2, schedulebean.getShipID());
+            ps.setString(3, schedulebean.getRouteID());
+            ps.setString(4, schedulebean.getStartDate());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                result = "Schedule added successfully.";
+            }
+        } catch (SQLException e) {
+            result = "Error adding schedule: " + e.getMessage();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean modifySchedule(ScheduleBean schedulebean) {
+        boolean isModified = false;
+        try {
+            String query = "UPDATE schedule SET shipID = ?, routeID = ?, startDate = ? WHERE scheduleID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, schedulebean.getShipID());
+            ps.setString(2, schedulebean.getRouteID());
+            ps.setString(3, schedulebean.getStartDate());
+            ps.setString(4, schedulebean.getScheduleID());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                isModified = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isModified;
+    }
+
+    @Override
+    public int removeSchedule(ArrayList<String> scheduleIds) {
+        int removedCount = 0;
+        try {
+            String query = "DELETE FROM schedule WHERE scheduleID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            
+            for (String scheduleId : scheduleIds) {
+                ps.setString(1, scheduleId);
+                removedCount += ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return removedCount;
+    }
+
+    @Override
+    public String addRoute(RouteBean routebean) {
+        String result = "Route could not be added.";
+        try {
+            String query = "INSERT INTO route (routeID, source, destination, travelDuration, fare) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, routebean.getRouteID());
+            ps.setString(2, routebean.getSource());
+            ps.setString(3, routebean.getDestination());
+            ps.setString(4, routebean.getTravelDuration());
+            ps.setDouble(5, routebean.getFare());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                result = "Route added successfully.";
+            }
+        } catch (SQLException e) {
+            result = "Error adding route: " + e.getMessage();
+        }
+        return result;
+    }
+
+    @Override
+    public boolean modifyRoute(RouteBean routebean) {
+        boolean isModified = false;
+        try {
+            String query = "UPDATE route SET source = ?, destination = ?, travelDuration = ?, fare = ? WHERE routeID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, routebean.getSource());
+            ps.setString(2, routebean.getDestination());
+            ps.setString(3, routebean.getTravelDuration());
+            ps.setDouble(4, routebean.getFare());
+            ps.setString(5, routebean.getRouteID());
+            
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                isModified = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isModified;
+    }
+
+    @Override
+    public int removeRoute(String routeId) {
+        int removedCount = 0;
+        try {
+            String query = "DELETE FROM route WHERE routeID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, routeId);
+            removedCount = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return removedCount;
+    }
+
+    @Override
+    public ShipBean viewByShipId(String shipID) {
+        ShipBean ship = null;
+        try {
+            String query = "SELECT * FROM ship WHERE shipID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, shipID);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                ship = new ShipBean();
+                ship.setShipID(rs.getString("shipID"));
+                ship.setShipName(rs.getString("shipName"));
+                ship.setSeatingCapacity(rs.getInt("seatingCapacity"));
+                ship.setReservationCapacity(rs.getInt("reservationCapacity"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

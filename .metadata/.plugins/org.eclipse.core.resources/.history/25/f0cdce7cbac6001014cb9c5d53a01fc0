@@ -1,0 +1,5 @@
+package com.ust.srs.service;
+
+public interface Administrator {
+
+}

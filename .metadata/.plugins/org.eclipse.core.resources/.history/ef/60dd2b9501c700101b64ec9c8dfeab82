@@ -1,0 +1,185 @@
+package com.ust.srs.ui;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.util.DB;
+
+public class Login {
+
+    public static void main(String[] args) {
+        // Show initial options: Login, Register, or Exit using JOptionPane
+        String[] options = {"Login", "Register", "Exit"};
+        int choice = JOptionPane.showOptionDialog(null, "Welcome to SeaRide! Please select an option:",
+                "SeaRide Login", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
+        switch (choice) {
+            case 0: // Login
+                handleLogin();
+                break;
+            case 1: // Register (You can implement registration logic here)
+                break;
+            case 2: // Exit
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Handle login process using JOptionPane
+    private static void handleLogin() {
+        // Prompt for UserID and Password
+        String userID = JOptionPane.showInputDialog("Enter UserID:");
+        if (userID == null) return; // If user cancels, return
+
+        String password = JOptionPane.showInputDialog("Enter Password:");
+        if (password == null) return; // If user cancels, return
+
+        // Authenticate credentials with database
+        CredentialsBean user = authenticate(userID, password);
+
+        if (user != null) {
+            // Successfully logged in, display the result
+            JOptionPane.showMessageDialog(null, "Login Successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+            if (user.getUserType().equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Welcome Admin!", "Admin", JOptionPane.INFORMATION_MESSAGE);
+                // Show admin operations if user is admin
+                showAdminOperations();
+            } else if (user.getUserType().equals("customer")) {
+                JOptionPane.showMessageDialog(null, "Welcome Customer!", "Customer", JOptionPane.INFORMATION_MESSAGE);
+                // Handle customer operations here (not implemented)
+            }
+            // Update loginStatus to 1 (logged in)
+            updateLoginStatus(userID, 1);
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid credentials. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Authenticate user by checking credentials in the database
+    private static CredentialsBean authenticate(String userID, String password) {
+        CredentialsBean user = null;
+        try {
+            // Prepare SQL query to check credentials
+            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, userID);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            // If a record exists, set the user details
+            if (rs.next()) {
+                user = new CredentialsBean();
+                user.setUserID(rs.getString("userID"));
+                user.setPassword(rs.getString("password"));
+                user.setUserType(rs.getString("userType"));
+                user.setLoginStatus(rs.getInt("loginStatus"));
+
+                // Check if already logged in (loginStatus = 1)
+                if (user.getLoginStatus() == 1) {
+                    JOptionPane.showMessageDialog(null, "User already logged in. Please log out first.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null; // Cannot login again if already logged in
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
+    }
+
+    // Update loginStatus to 1 (logged in)
+    private static void updateLoginStatus(String userID, int status) {
+        try {
+            String query = "UPDATE credentials SET loginStatus = ? WHERE userID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating login status: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Show admin operations screen with buttons
+    private static void showAdminOperations() {
+        // Create a new JFrame for Admin operations
+        JFrame frame = new JFrame("Admin Operations");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new GridLayout(7, 2));  // 7 rows, 2 columns for the buttons
+
+        // Add buttons for all the Admin operations
+        JButton addShipButton = new JButton("AD-001 Add Ship Details");
+        JButton deleteShipButton = new JButton("AD-002 Delete Ship Details");
+        JButton viewShipButton = new JButton("AD-003 View Ship Details");
+        JButton modifyShipButton = new JButton("AD-004 Modify Ship Details");
+        JButton addRouteButton = new JButton("AD-005 Add Ship Route Details");
+        JButton deleteRouteButton = new JButton("AD-006 Delete Ship Route Details");
+        JButton viewRouteButton = new JButton("AD-007 View Ship Route Details");
+        JButton modifyRouteButton = new JButton("AD-008 Modify Ship Route Details");
+        JButton addScheduleButton = new JButton("AD-009 Add Schedule Details");
+        JButton deleteScheduleButton = new JButton("AD-010 Delete Schedule Details");
+        JButton viewScheduleButton = new JButton("AD-011 View Schedule Details");
+        JButton modifyScheduleButton = new JButton("AD-012 Modify Schedule Details");
+        JButton viewPassengersButton = new JButton("AD-013 View Passengers on Ship");
+
+        // Add buttons to the frame
+        frame.add(addShipButton);
+        frame.add(deleteShipButton);
+        frame.add(viewShipButton);
+        frame.add(modifyShipButton);
+        frame.add(addRouteButton);
+        frame.add(deleteRouteButton);
+        frame.add(viewRouteButton);
+        frame.add(modifyRouteButton);
+        frame.add(addScheduleButton);
+        frame.add(deleteScheduleButton);
+        frame.add(viewScheduleButton);
+        frame.add(modifyScheduleButton);
+        frame.add(viewPassengersButton);
+
+        // Add action listeners for each button (can be extended for each action)
+        addShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add ship operation (Implement later)
+                JOptionPane.showMessageDialog(frame, "Add Ship functionality here.");
+            }
+        });
+
+        deleteShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Delete ship operation (Implement later)
+                JOptionPane.showMessageDialog(frame, "Delete Ship functionality here.");
+            }
+        });
+
+        viewShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // View ship operation (Implement later)
+                JOptionPane.showMessageDialog(frame, "View Ship functionality here.");
+            }
+        });
+
+        modifyShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Modify ship operation (Implement later)
+                JOptionPane.showMessageDialog(frame, "Modify Ship functionality here.");
+            }
+        });
+
+        // Add more actions for other buttons similarly...
+
+        // Show the frame
+        frame.setVisible(true);
+    }
+}
+

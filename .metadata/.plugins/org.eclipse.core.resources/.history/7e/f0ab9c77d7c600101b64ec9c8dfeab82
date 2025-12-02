@@ -1,0 +1,242 @@
+package com.ust.srs.ui;
+
+import com.ust.srs.bean.*;
+import com.ust.srs.dao.AdministratorDAO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Admin {
+
+    private static AdministratorDAO adminDao = new AdministratorDAO();
+
+    public static void main(String[] args) {
+        // Set up the JFrame for Admin Panel
+        JFrame frame = new JFrame("Admin Operations");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.setLayout(new GridLayout(6, 2)); // Create a grid for buttons (6 rows, 2 columns)
+
+        // Add buttons for all the Admin operations
+        JButton addShipButton = new JButton("AD-001");
+        JButton deleteShipButton = new JButton("AD-002");
+        JButton viewShipButton = new JButton("AD-003");
+        JButton modifyShipButton = new JButton("AD-004");
+        JButton addRouteButton = new JButton("AD-005");
+        JButton deleteRouteButton = new JButton("AD-006");
+        JButton viewRouteButton = new JButton("AD-007");
+        JButton modifyRouteButton = new JButton("AD-008");
+        JButton addScheduleButton = new JButton("AD-009");
+        JButton deleteScheduleButton = new JButton("AD-010");
+        JButton viewScheduleButton = new JButton("AD-011");
+        JButton modifyScheduleButton = new JButton("AD-012");
+        JButton viewPassengersButton = new JButton("AD-013");
+
+        // Add all buttons to the frame
+        frame.add(addShipButton);
+        frame.add(deleteShipButton);
+        frame.add(viewShipButton);
+        frame.add(modifyShipButton);
+        frame.add(addRouteButton);
+        frame.add(deleteRouteButton);
+        frame.add(viewRouteButton);
+        frame.add(modifyRouteButton);
+        frame.add(addScheduleButton);
+        frame.add(deleteScheduleButton);
+        frame.add(viewScheduleButton);
+        frame.add(modifyScheduleButton);
+        frame.add(viewPassengersButton);
+
+        // Set up action listeners for each button
+        addShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addShipDetails();
+            }
+        });
+
+        deleteShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteShipDetails();
+            }
+        });
+
+        viewShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewShipDetails();
+            }
+        });
+
+        modifyShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyShipDetails();
+            }
+        });
+
+        addRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addRouteDetails();
+            }
+        });
+
+        deleteRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteRouteDetails();
+            }
+        });
+
+        viewRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewRouteDetails();
+            }
+        });
+
+        modifyRouteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyRouteDetails();
+            }
+        });
+
+        addScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addScheduleDetails();
+            }
+        });
+
+        deleteScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteScheduleDetails();
+            }
+        });
+
+        viewScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewScheduleDetails();
+            }
+        });
+
+        modifyScheduleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyScheduleDetails();
+            }
+        });
+
+        viewPassengersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewPassengers();
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    // Example method for adding ship details
+    private static void addShipDetails() {
+        String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+        String shipName = JOptionPane.showInputDialog("Enter Ship Name:");
+        int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Seating Capacity:"));
+        int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Reservation Capacity:"));
+
+        ShipBean shipBean = new ShipBean();
+        shipBean.setShipID(shipID);
+        shipBean.setShipName(shipName);
+        shipBean.setSeatingCapacity(seatingCapacity);
+        shipBean.setReservationCapacity(reservationCapacity);
+
+        String result = adminDao.addShip(shipBean);
+        JOptionPane.showMessageDialog(null, result);
+        
+        // Check in MySQL after adding
+        viewShipDetails();
+    }
+
+    // Method to delete ship details
+    private static void deleteShipDetails() {
+        String shipID = JOptionPane.showInputDialog("Enter Ship ID to delete:");
+        ArrayList<String> shipIds = new ArrayList<>();
+        shipIds.add(shipID);
+
+        int count = adminDao.removeShip(shipIds);
+        if (count > 0) {
+            JOptionPane.showMessageDialog(null, "Ship deleted successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to delete ship.");
+        }
+        
+        // Check in MySQL after deleting
+        viewShipDetails();
+    }
+
+    // Method to view ship details
+    private static void viewShipDetails() {
+        // Retrieve and show all ships
+        ArrayList<ShipBean> ships = adminDao.viewByAllShips();
+        StringBuilder shipDetails = new StringBuilder();
+        for (ShipBean ship : ships) {
+            shipDetails.append(ship.toString()).append("\n");
+        }
+
+        if (shipDetails.length() > 0) {
+            JOptionPane.showMessageDialog(null, "Ship Details: \n" + shipDetails);
+        } else {
+            JOptionPane.showMessageDialog(null, "No ships available.");
+        }
+    }
+
+    // Example method to modify ship details
+    private static void modifyShipDetails() {
+        String shipID = JOptionPane.showInputDialog("Enter Ship ID to modify:");
+        String shipName = JOptionPane.showInputDialog("Enter new Ship Name:");
+        int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Seating Capacity:"));
+        int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Reservation Capacity:"));
+
+        ShipBean shipBean = new ShipBean();
+        shipBean.setShipID(shipID);
+        shipBean.setShipName(shipName);
+        shipBean.setSeatingCapacity(seatingCapacity);
+        shipBean.setReservationCapacity(reservationCapacity);
+
+        boolean success = adminDao.modifyShip(shipBean);
+        if (success) {
+            JOptionPane.showMessageDialog(null, "Ship modified successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to modify ship.");
+        }
+
+        // Check in MySQL after modifying
+        viewShipDetails();
+    }
+
+    // Similar methods for other operations (add route, delete route, etc.) can be written here
+
+    // Method to view passengers traveling on a ship
+    private static void viewPassengers() {
+        String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID to view passengers:");
+        ArrayList<PassengerBean> passengers = adminDao.viewPassengersByShip(scheduleID);
+
+        StringBuilder passengerDetails = new StringBuilder();
+        for (PassengerBean passenger : passengers) {
+            passengerDetails.append(passenger.toString()).append("\n");
+        }
+
+        if (passengerDetails.length() > 0) {
+            JOptionPane.showMessageDialog(null, "Passengers Details: \n" + passengerDetails);
+        } else {
+            JOptionPane.showMessageDialog(null, "No passengers found for this schedule.");
+        }
+    }
+}

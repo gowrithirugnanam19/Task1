@@ -1,0 +1,272 @@
+package com.ust.srs.ui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.bean.ShipBean;
+import com.ust.srs.bean.RouteBean;
+import com.ust.srs.bean.ScheduleBean;
+import com.ust.srs.util.DB;
+
+public class Login {
+
+    public static void main(String[] args) {
+        // Show initial options: Login, Register, or Exit using JOptionPane
+        String[] options = {"Login", "Register", "Exit"};
+        int choice = JOptionPane.showOptionDialog(null, "Welcome to SeaRide! Please select an option:",
+                "SeaRide Login", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
+        switch (choice) {
+            case 0: // Login
+                handleLogin();
+                break;
+            case 1: // Register (You can implement registration logic here)
+                break;
+            case 2: // Exit
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Handle login process using JOptionPane
+    private static void handleLogin() {
+        // Prompt for UserID and Password
+        String userID = JOptionPane.showInputDialog("Enter UserID:");
+        if (userID == null) return; // If user cancels, return
+
+        String password = JOptionPane.showInputDialog("Enter Password:");
+        if (password == null) return; // If user cancels, return
+
+        // Authenticate credentials with database
+        CredentialsBean user = authenticate(userID, password);
+
+        if (user != null) {
+            // Successfully logged in, display the result
+            JOptionPane.showMessageDialog(null, "Login Successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+            
+            // After success, show the admin operations
+            if (user.getUserType().equals("admin")) {
+                // Show Admin Operations after login is successful
+                showAdminOperations();
+            } else if (user.getUserType().equals("customer")) {
+                JOptionPane.showMessageDialog(null, "Welcome Customer!", "Customer", JOptionPane.INFORMATION_MESSAGE);
+                // Customer operations can be handled here (not implemented)
+            }
+            // Update loginStatus to 1 (logged in)
+            updateLoginStatus(userID, 1);
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid credentials. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Authenticate user by checking credentials in the database
+    private static CredentialsBean authenticate(String userID, String password) {
+        CredentialsBean user = null;
+        try {
+            // Prepare SQL query to check credentials
+            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, userID);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            // If a record exists, set the user details
+            if (rs.next()) {
+                user = new CredentialsBean();
+                user.setUserID(rs.getString("userID"));
+                user.setPassword(rs.getString("password"));
+                user.setUserType(rs.getString("userType"));
+                user.setLoginStatus(rs.getInt("loginStatus"));
+
+                // Check if already logged in (loginStatus = 1)
+                if (user.getLoginStatus() == 1) {
+                    JOptionPane.showMessageDialog(null, "User already logged in. Please log out first.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null; // Cannot login again if already logged in
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
+    }
+
+    // Update loginStatus to 1 (logged in)
+    private static void updateLoginStatus(String userID, int status) {
+        try {
+            String query = "UPDATE credentials SET loginStatus = ? WHERE userID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating login status: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Show admin operations screen with buttons
+    private static void showAdminOperations() {
+        // Create a new JFrame for Admin operations
+        JFrame frame = new JFrame("Admin Operations");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new GridLayout(7, 2));  // 7 rows, 2 columns for the buttons
+
+        // Add buttons for all the Admin operations
+        JButton addShipButton = new JButton("AD-001 Add Ship Details");
+        JButton deleteShipButton = new JButton("AD-002 Delete Ship Details");
+        JButton viewShipButton = new JButton("AD-003 View Ship Details");
+        JButton modifyShipButton = new JButton("AD-004 Modify Ship Details");
+        JButton addRouteButton = new JButton("AD-005 Add Ship Route Details");
+        JButton deleteRouteButton = new JButton("AD-006 Delete Ship Route Details");
+        JButton viewRouteButton = new JButton("AD-007 View Ship Route Details");
+        JButton modifyRouteButton = new JButton("AD-008 Modify Ship Route Details");
+        JButton addScheduleButton = new JButton("AD-009 Add Schedule Details");
+        JButton deleteScheduleButton = new JButton("AD-010 Delete Schedule Details");
+        JButton viewScheduleButton = new JButton("AD-011 View Schedule Details");
+        JButton modifyScheduleButton = new JButton("AD-012 Modify Schedule Details");
+        JButton viewPassengersButton = new JButton("AD-013 View Passengers on Ship");
+
+        // Add buttons to the frame
+        frame.add(addShipButton);
+        frame.add(deleteShipButton);
+        frame.add(viewShipButton);
+        frame.add(modifyShipButton);
+        frame.add(addRouteButton);
+        frame.add(deleteRouteButton);
+        frame.add(viewRouteButton);
+        frame.add(modifyRouteButton);
+        frame.add(addScheduleButton);
+        frame.add(deleteScheduleButton);
+        frame.add(viewScheduleButton);
+        frame.add(modifyScheduleButton);
+        frame.add(viewPassengersButton);
+
+        // Add action listeners for each button
+        addShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addShipDetails(frame); // Add Ship Operation
+            }
+        });
+
+        deleteShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteShipDetails(frame); // Delete Ship Operation
+            }
+        });
+
+        viewShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewShipDetails(frame); // View Ship Operation
+            }
+        });
+
+        modifyShipButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifyShipDetails(frame); // Modify Ship Operation
+            }
+        });
+
+        // Add similar listeners for other buttons...
+
+        frame.setVisible(true);
+    }
+
+    // Add ship details to the database
+    private static void addShipDetails(JFrame frame) {
+        String shipID = JOptionPane.showInputDialog(frame, "Enter Ship ID:");
+        String shipName = JOptionPane.showInputDialog(frame, "Enter Ship Name:");
+        int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Seating Capacity:"));
+        int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter Reservation Capacity:"));
+
+        String query = "INSERT INTO ship (shipID, shipName, seatingCapacity, reservationCapacity) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = DB.getCon().prepareStatement(query)) {
+            ps.setString(1, shipID);
+            ps.setString(2, shipName);
+            ps.setInt(3, seatingCapacity);
+            ps.setInt(4, reservationCapacity);
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(frame, "Ship added successfully!");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "Error adding ship: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Delete ship details from the database
+    private static void deleteShipDetails(JFrame frame) {
+        String shipID = JOptionPane.showInputDialog(frame, "Enter Ship ID to delete:");
+        String query = "DELETE FROM ship WHERE shipID = ?";
+        try (PreparedStatement ps = DB.getCon().prepareStatement(query)) {
+            ps.setString(1, shipID);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(frame, "Ship deleted successfully!");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ship not found.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "Error deleting ship: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // View ship details from the database
+    private static void viewShipDetails(JFrame frame) {
+        String query = "SELECT * FROM ship";
+        try (PreparedStatement ps = DB.getCon().prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            StringBuilder sb = new StringBuilder("Ship Details:\n");
+            while (rs.next()) {
+                sb.append("Ship ID: ").append(rs.getString("shipID"))
+                  .append(", Name: ").append(rs.getString("shipName"))
+                  .append(", Seating Capacity: ").append(rs.getInt("seatingCapacity"))
+                  .append(", Reservation Capacity: ").append(rs.getInt("reservationCapacity"))
+                  .append("\n");
+            }
+
+            JOptionPane.showMessageDialog(frame, sb.toString());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "Error viewing ships: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Modify ship details (e.g., modify name or capacity)
+    private static void modifyShipDetails(JFrame frame) {
+        String shipID = JOptionPane.showInputDialog(frame, "Enter Ship ID to modify:");
+        String newShipName = JOptionPane.showInputDialog(frame, "Enter new Ship Name:");
+        int newSeatingCapacity = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter new Seating Capacity:"));
+        int newReservationCapacity = Integer.parseInt(JOptionPane.showInputDialog(frame, "Enter new Reservation Capacity:"));
+
+        String query = "UPDATE ship SET shipName = ?, seatingCapacity = ?, reservationCapacity = ? WHERE shipID = ?";
+        try (PreparedStatement ps = DB.getCon().prepareStatement(query)) {
+            ps.setString(1, newShipName);
+            ps.setInt(2, newSeatingCapacity);
+            ps.setInt(3, newReservationCapacity);
+            ps.setString(4, shipID);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(frame, "Ship details updated successfully!");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ship not found.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame, "Error modifying ship: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // You can add the other operations similarly: Add Route, View Route, etc.
+}
+
+

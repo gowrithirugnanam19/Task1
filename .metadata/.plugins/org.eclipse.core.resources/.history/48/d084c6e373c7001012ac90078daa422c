@@ -1,0 +1,1151 @@
+package com.ust.srs.ui;
+
+import com.ust.srs.bean.CredentialsBean;
+import com.ust.srs.bean.RouteBean;
+import com.ust.srs.bean.ScheduleBean;
+import com.ust.srs.bean.ShipBean;
+import com.ust.srs.util.DB;
+import com.ust.srs.dao.AdministratorDAO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Admin {
+    
+    private static AdministratorDAO adminDao = new AdministratorDAO();
+    
+    public static void main(String[] args) {
+    	// Show initial options: Login, Register, or Exit using JOptionPane
+        String[] options = {"Login", "Register", "Exit"};
+        int choice = JOptionPane.showOptionDialog(null, "Welcome to SeaRide! Please select an option:",
+                "SeaRide Login", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
+        switch (choice) {
+            case 0: // Login
+                handleLogin();
+                break;
+            case 1: // Register (You can implement registration logic here)
+                break;
+            case 2: // Exit
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Handle login process using JOptionPane
+    private static void handleLogin() {
+        // Prompt for UserID and Password
+        String userID = JOptionPane.showInputDialog("Enter UserID:");
+        if (userID == null) return; // If user cancels, return
+
+        String password = JOptionPane.showInputDialog("Enter Password:");
+        if (password == null) return; // If user cancels, return
+
+        // Authenticate credentials with database
+        CredentialsBean user = authenticate(userID, password);
+
+        if (user != null) {
+            // Successfully logged in, display the result
+            JOptionPane.showMessageDialog(null, "Login Successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
+            if (user.getUserType().equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Welcome Admin!", "Admin", JOptionPane.INFORMATION_MESSAGE);
+                // You can display admin details here (not implemented)
+                private static void showAdminOperations() {
+                    JFrame frame = new JFrame("Admin Operations");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setSize(300, 200);
+                    frame.setLayout(new GridLayout(4, 3)); // Create a grid for buttons (6 rows, 2 columns)
+
+                    // Add buttons for all the Admin operations
+                    JButton addShipButton = new JButton("AD-001 Add Ship");
+                    JButton deleteShipButton = new JButton("AD-002 Delete Ship");
+                    JButton viewShipButton = new JButton("AD-003 View Ship");
+                    JButton modifyShipButton = new JButton("AD-004 Modify Ship");
+                    JButton addRouteButton = new JButton("AD-005 Add Route");
+                    JButton deleteRouteButton = new JButton("AD-006 Delete Route");
+                    JButton viewRouteButton = new JButton("AD-007 View Route");
+                    JButton modifyRouteButton = new JButton("AD-008 Modify Route");
+                    JButton addScheduleButton = new JButton("AD-009 Add Schedule");
+                    JButton deleteScheduleButton = new JButton("AD-010 Delete Schedule");
+                    JButton viewScheduleButton = new JButton("AD-011 View Schedule");
+                    JButton modifyScheduleButton = new JButton("AD-012 Modify Schedule");
+                    JButton viewPassengersButton = new JButton("AD-013 View Passenger");
+
+                    // Add all buttons to the frame
+                    frame.add(addShipButton);
+                    frame.add(deleteShipButton);
+                    frame.add(viewShipButton);
+                    frame.add(modifyShipButton);
+                    frame.add(addRouteButton);
+                    frame.add(deleteRouteButton);
+                    frame.add(viewRouteButton);
+                    frame.add(modifyRouteButton);
+                    frame.add(addScheduleButton);
+                    frame.add(deleteScheduleButton);
+                    frame.add(viewScheduleButton);
+                    frame.add(modifyScheduleButton);
+                    frame.add(viewPassengersButton);
+
+                    // Set up action listeners for each button
+                    addShipButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            addShipDetails();
+                        }
+                    });
+
+                    deleteShipButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            deleteShipDetails();
+                        }
+                    });
+
+                    viewShipButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            viewShipDetails();
+                        }
+                    });
+
+                    modifyShipButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            modifyShipDetails();
+                        }
+                    });
+
+                    addRouteButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            addRouteDetails();
+                        }
+                    });
+
+                    deleteRouteButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            deleteRouteDetails();
+                        }
+                    });
+
+                    viewRouteButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            viewRouteDetails();
+                        }
+                    });
+
+                    modifyRouteButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            modifyRouteDetails();
+                        }
+                    });
+
+                    addScheduleButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            addScheduleDetails();
+                        }
+                    });
+
+                    deleteScheduleButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            deleteScheduleDetails();
+                        }
+                    });
+
+                    viewScheduleButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            viewScheduleDetails();
+                        }
+                    });
+
+                    modifyScheduleButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            modifyScheduleDetails();
+                        }
+                    });
+
+//                    viewPassengersButton.addActionListener(new ActionListener() {
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            viewPassengers();
+//                        }
+//                    });
+
+                    frame.setVisible(true);
+                }
+
+                // Example method for adding ship details
+                private static void addShipDetails() {
+                    String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+                    String shipName = JOptionPane.showInputDialog("Enter Ship Name:");
+                    int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Seating Capacity:"));
+                    int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Reservation Capacity:"));
+
+                    ShipBean shipBean = new ShipBean();
+                    shipBean.setShipID(shipID);
+                    shipBean.setShipName(shipName);
+                    shipBean.setSeatingCapacity(seatingCapacity);
+                    shipBean.setReservationCapacity(reservationCapacity);
+
+                    String result = adminDao.addShip(shipBean);
+                    JOptionPane.showMessageDialog(null, result);
+
+                    // Check in MySQL after adding
+                    viewShipDetails();
+                }
+
+                // Method to delete ship details
+                private static void deleteShipDetails() {
+                    String shipID = JOptionPane.showInputDialog("Enter Ship ID to delete:");
+                    ArrayList<String> shipIds = new ArrayList<>();
+                    shipIds.add(shipID);
+
+                    int count = adminDao.removeShip(shipIds);
+                    if (count > 0) {
+                        JOptionPane.showMessageDialog(null, "Ship deleted successfully.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to delete ship.");
+                    }
+
+                    // Check in MySQL after deleting
+                    viewShipDetails();
+                }
+
+                // Method to view ship details
+                private static void viewShipDetails() {
+                    // Retrieve and show all ships
+                    ArrayList<ShipBean> ships = adminDao.viewByAllShips();
+                    StringBuilder shipDetails = new StringBuilder();
+                    for (ShipBean ship : ships) {
+                        shipDetails.append(ship.toString()).append("\n");
+                    }
+
+                    if (shipDetails.length() > 0) {
+                        JOptionPane.showMessageDialog(null, "Ship Details: \n" + shipDetails);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No ships available.");
+                    }
+                }
+             // Modify ship details method without using JFrame
+                private static void modifyShipDetails() {
+                    // Prompt the admin for the Ship ID to modify
+                    String shipID = JOptionPane.showInputDialog("Enter Ship ID to modify:");
+                    if (shipID == null || shipID.trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Ship ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Check if the ship exists in the database
+                    String checkQuery = "SELECT * FROM ship WHERE shipID = ?";
+                    try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+                        ps.setString(1, shipID);
+                        ResultSet rs = ps.executeQuery();
+
+                        // If the ship exists, prompt the admin to modify the details
+                        if (rs.next()) {
+                            // Prompt for new Ship Name
+                            String newShipName = JOptionPane.showInputDialog("Enter new Ship Name:");
+                            if (newShipName == null || newShipName.trim().isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Ship Name cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            // Prompt for new Seating Capacity
+                            int newSeatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Seating Capacity:"));
+                            // Prompt for new Reservation Capacity
+                            int newReservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Reservation Capacity:"));
+
+                            // SQL query to update the ship details
+                            String updateQuery = "UPDATE ship SET shipName = ?, seatingCapacity = ?, reservationCapacity = ? WHERE shipID = ?";
+                            try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+                                updatePs.setString(1, newShipName);
+                                updatePs.setInt(2, newSeatingCapacity);
+                                updatePs.setInt(3, newReservationCapacity);
+                                updatePs.setString(4, shipID);
+
+                                int rowsAffected = updatePs.executeUpdate();
+                                if (rowsAffected > 0) {
+                                    JOptionPane.showMessageDialog(null, "Ship details updated successfully!");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Failed to update ship details.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } catch (SQLException e) {
+                                JOptionPane.showMessageDialog(null, "Error updating ship details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No ship found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(null, "Error checking ship ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+               //add route details
+               
+                private static void addRouteDetails() {
+                    String routeID = JOptionPane.showInputDialog("Enter Route ID:");
+                    String source = JOptionPane.showInputDialog("Enter Source:");
+                    String destination = JOptionPane.showInputDialog("Enter Destination:");
+                    String travelDuration = JOptionPane.showInputDialog("Enter Travel Duration:");
+                    double fare = Double.parseDouble(JOptionPane.showInputDialog("Enter Fare:"));
+                   
+
+                    RouteBean routeBean = new RouteBean();
+                    routeBean.setRouteID(routeID);
+                    routeBean.setSource(source);
+                    routeBean.setDestination(destination);
+                    routeBean.setTravelDuration(travelDuration);
+                    routeBean.setFare(fare);
+
+                    String result = adminDao.addRoute(routeBean);
+                    JOptionPane.showMessageDialog(null, result);
+
+                    // Check in MySQL after adding
+                    viewRouteDetails();
+                }
+                // View route details from the database
+                private static void viewRouteDetails() {
+                    // Retrieve and show all ships
+                    ArrayList<RouteBean> routes = adminDao.viewByAllRoute();
+                    StringBuilder routeDetails = new StringBuilder();
+                    for (RouteBean route : routes) {
+                        routeDetails.append(route.toString()).append("\n");
+                    }
+
+                    if (routeDetails.length() > 0) {
+                        JOptionPane.showMessageDialog(null, "Route Details: \n" + routeDetails);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No routes available.");
+                    }
+                }
+             
+                // Method to delete ship details
+                
+             private static void deleteRouteDetails() {
+                 String routeID = JOptionPane.showInputDialog("Enter Route ID to delete:");
+                 ArrayList<String> routeIds = new ArrayList<>();
+                 routeIds.add(routeID);
+
+                 int count = adminDao.removeRoute(routeIds);
+                 if (count > 0) {
+                     JOptionPane.showMessageDialog(null, "Route deleted successfully.");
+                 } else {
+                     JOptionPane.showMessageDialog(null, "Failed to delete route.");
+                 }
+
+                 // Check in MySQL after deleting
+                 viewRouteDetails();
+             }
+             
+            //Modify route details method without using JFrame
+            private static void modifyRouteDetails() {
+              // Prompt the admin for the Route ID to modify
+              String routeID = JOptionPane.showInputDialog("Enter Route ID to modify:");
+              if (routeID == null || routeID.trim().isEmpty()) {
+                  JOptionPane.showMessageDialog(null, "Route ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                  return;
+              }
+
+              // Check if the route exists in the database
+              String checkQuery = "SELECT * FROM route WHERE routeID = ?";
+              try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+                  ps.setString(1, routeID);
+                  ResultSet rs = ps.executeQuery();
+
+                  // If the route exists, prompt the admin to modify the details
+                  if (rs.next()) {
+                      // Prompt for new source
+                      String newSource = JOptionPane.showInputDialog("Enter new Source:");
+                      if (newSource == null || newSource.trim().isEmpty()) {
+                          JOptionPane.showMessageDialog(null, "Source cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                          return;
+                      }
+
+                      // Prompt for new destination
+                      String newDestination = JOptionPane.showInputDialog("Enter new Destination:");
+                      if (newDestination == null || newDestination.trim().isEmpty()) {
+                          JOptionPane.showMessageDialog(null, "Destination cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                          return;
+                      }
+
+                      // Prompt for new travel duration
+                      String newTravelDuration = JOptionPane.showInputDialog("Enter new Travel Duration:");
+                      if (newTravelDuration == null || newTravelDuration.trim().isEmpty()) {
+                          JOptionPane.showMessageDialog(null, "Travel Duration cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                          return;
+                      }
+
+                      // Prompt for new fare
+                      double newFare = Double.parseDouble(JOptionPane.showInputDialog("Enter new Fare:"));
+
+                      // SQL query to update the route details
+                      String updateQuery = "UPDATE route SET source = ?, destination = ?, travelDuration = ?, fare = ? WHERE routeID = ?";
+                      try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+                          updatePs.setString(1, newSource);
+                          updatePs.setString(2, newDestination);
+                          updatePs.setString(3, newTravelDuration);
+                          updatePs.setDouble(4, newFare);
+                          updatePs.setString(5, routeID);
+
+                          int rowsAffected = updatePs.executeUpdate();
+                          if (rowsAffected > 0) {
+                              JOptionPane.showMessageDialog(null, "Route details updated successfully!");
+                          } else {
+                              JOptionPane.showMessageDialog(null, "Failed to update route details.", "Error", JOptionPane.ERROR_MESSAGE);
+                          }
+                      } catch (SQLException e) {
+                          JOptionPane.showMessageDialog(null, "Error updating route details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                      }
+                  } else {
+                      JOptionPane.showMessageDialog(null, "No route found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                  }
+              } catch (SQLException e) {
+                  JOptionPane.showMessageDialog(null, "Error checking route ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+              }
+            }
+              //Example method for adding schedule details
+               private static void addScheduleDetails() {
+               // Prompt the admin for the necessary schedule details
+                String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID:");
+                String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+                String routeID = JOptionPane.showInputDialog("Enter Route ID:");
+                String startDate = JOptionPane.showInputDialog("Enter Start Date (YYYY-MM-DD):");
+
+                // Create a new ScheduleBean and set the values
+                ScheduleBean scheduleBean = new ScheduleBean();
+                scheduleBean.setScheduleID(scheduleID);
+                scheduleBean.setShipID(shipID);
+                scheduleBean.setRouteID(routeID);
+                scheduleBean.setStartDate(startDate);
+
+                //  Add the schedule using the DAO method
+                 String result = adminDao.addSchedule(scheduleBean);
+                 JOptionPane.showMessageDialog(null, result);
+
+             // After adding, check in MySQL by displaying the schedule details
+                 viewScheduleDetails();
+            }
+            //Method to view schedule details
+                private static void viewScheduleDetails() {
+             // Retrieve and show all schedules
+                 ArrayList<ScheduleBean> schedules = adminDao.viewByAllSchedule();
+                 StringBuilder scheduleDetails = new StringBuilder();
+                 for (ScheduleBean schedule : schedules) {
+                 scheduleDetails.append(schedule.toString()).append("\n");
+             }
+
+             // Show the schedule details or a message if no schedules are available
+                 if (scheduleDetails.length() > 0) {
+                 JOptionPane.showMessageDialog(null, "Schedule Details: \n" + scheduleDetails);
+               } else {
+                 JOptionPane.showMessageDialog(null, "No schedules available.");
+              }
+            }
+             // Method to delete schedule details
+                private static void deleteScheduleDetails() {
+                    // Prompt the admin for the Schedule ID to delete
+                    String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID to delete:");
+
+                    // Create an ArrayList to hold the schedule ID(s)
+                    ArrayList<String> scheduleIds = new ArrayList<>();
+                    scheduleIds.add(scheduleID);
+
+                    // Call the DAO method to delete the schedule
+                    int count = adminDao.removeSchedule(scheduleIds);
+                    
+                    // Show success or failure message
+                    if (count > 0) {
+                        JOptionPane.showMessageDialog(null, "Schedule deleted successfully.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to delete schedule.");
+                    }
+
+                    // Check in MySQL after deleting by viewing the updated schedule details
+                    viewScheduleDetails();
+                }
+
+             // Method to modify schedule details
+                private static void modifyScheduleDetails() {
+                    // Prompt the admin for the Schedule ID to modify
+                    String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID to modify:");
+                    if (scheduleID == null || scheduleID.trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Schedule ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Check if the schedule exists in the database
+                    String checkQuery = "SELECT * FROM schedule WHERE scheduleID = ?";
+                    try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+                        ps.setString(1, scheduleID);
+                        ResultSet rs = ps.executeQuery();
+
+                        // If the schedule exists, prompt the admin to modify the details
+                        if (rs.next()) {
+                            // Prompt for new Ship ID (you can also validate this shipID if needed)
+                            String newShipID = JOptionPane.showInputDialog("Enter new Ship ID:");
+                            if (newShipID == null || newShipID.trim().isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Ship ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            // Prompt for new Route ID
+                            String newRouteID = JOptionPane.showInputDialog("Enter new Route ID:");
+                            if (newRouteID == null || newRouteID.trim().isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Route ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            // Prompt for new Start Date
+                            String newStartDate = JOptionPane.showInputDialog("Enter new Start Date (YYYY-MM-DD):");
+                            if (newStartDate == null || newStartDate.trim().isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Start Date cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            // SQL query to update the schedule details
+                            String updateQuery = "UPDATE schedule SET shipID = ?, routeID = ?, startDate = ? WHERE scheduleID = ?";
+                            try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+                                updatePs.setString(1, newShipID);
+                                updatePs.setString(2, newRouteID);
+                                updatePs.setString(3, newStartDate);
+                                updatePs.setString(4, scheduleID);
+
+                                int rowsAffected = updatePs.executeUpdate();
+                                if (rowsAffected > 0) {
+                                    JOptionPane.showMessageDialog(null, "Schedule details updated successfully!");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Failed to update schedule details.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } catch (SQLException e) {
+                                JOptionPane.showMessageDialog(null, "Error updating schedule details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No schedule found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(null, "Error checking schedule ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                
+            } else if (user.getUserType().equals("customer")) {
+                JOptionPane.showMessageDialog(null, "Welcome Customer!", "Customer", JOptionPane.INFORMATION_MESSAGE);
+                // You can display customer details here (not implemented)
+            }
+            // Update loginStatus to 1 (logged in)
+            updateLoginStatus(userID, 1);
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid credentials. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Authenticate user by checking credentials in the database
+    private static CredentialsBean authenticate(String userID, String password) {
+        CredentialsBean user = null;
+        try {
+            // Prepare SQL query to check credentials
+            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setString(1, userID);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            // If a record exists, set the user details
+            if (rs.next()) {
+                user = new CredentialsBean();
+                user.setUserID(rs.getString("userID"));
+                user.setPassword(rs.getString("password"));
+                user.setUserType(rs.getString("userType"));
+                user.setLoginStatus(rs.getInt("loginStatus"));
+
+                // Check if already logged in (loginStatus = 1)
+                if (user.getLoginStatus() == 1) {
+                    JOptionPane.showMessageDialog(null, "User already logged in. Please log out first.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return null; // Cannot login again if already logged in
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
+    }
+
+    // Update loginStatus to 1 (logged in)
+    private static void updateLoginStatus(String userID, int status) {
+        try {
+            String query = "UPDATE credentials SET loginStatus = ? WHERE userID = ?";
+            PreparedStatement ps = DB.getCon().prepareStatement(query);
+            ps.setInt(1, status);
+            ps.setString(2, userID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating login status: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    	
+    	
+    }
+//        // Show the login dialog first
+//        showLoginDialog();
+//    }
+//
+//    // Show the login dialog
+//    private static void showLoginDialog() {
+//        JFrame loginFrame = new JFrame("Admin Login");
+//        loginFrame.setSize(200, 100);
+//        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        loginFrame.setLayout(new GridLayout(3, 2));
+//        
+//        // Create login components
+//        JLabel userLabel = new JLabel("User ID:");
+//        JTextField userField = new JTextField();
+//        JLabel passLabel = new JLabel("Password:");
+//        JPasswordField passField = new JPasswordField();
+//        JButton loginButton = new JButton("Login");
+//
+//        // Add components to the login frame
+//        loginFrame.add(userLabel);
+//        loginFrame.add(userField);
+//        loginFrame.add(passLabel);
+//        loginFrame.add(passField);
+//        loginFrame.add(loginButton);
+//
+//        loginFrame.setVisible(true);
+//
+//        // Add action listener for the login button
+//        loginButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String userID = userField.getText();
+//                String password = new String(passField.getPassword());
+//
+//                if (authenticateAdmin(userID, password)) {
+//                    // If login is successful, hide the login frame and show admin operations
+//                    loginFrame.dispose();  // Close the login window
+//                    showAdminOperations();
+//                } else {
+//                    JOptionPane.showMessageDialog(loginFrame, "Invalid User ID or Password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+//                }
+//            }
+//        });
+//    }
+//
+//    // Validate admin login from MySQL
+//    private static boolean authenticateAdmin(String userID, String password) {
+//        try {
+//            String query = "SELECT * FROM credentials WHERE userID = ? AND password = ? AND userType = 'A'";  // 'A' for Admin
+//            var con = DB.getCon();
+//            var ps = con.prepareStatement(query);
+//            ps.setString(1, userID);
+//            ps.setString(2, password);
+//            var rs = ps.executeQuery();
+//            
+//            return rs.next(); // If there is a matching admin record
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
+
+    // After successful login, show admin operations
+//    private static void showAdminOperations() {
+//        JFrame frame = new JFrame("Admin Operations");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(300, 200);
+//        frame.setLayout(new GridLayout(4, 3)); // Create a grid for buttons (6 rows, 2 columns)
+//
+//        // Add buttons for all the Admin operations
+//        JButton addShipButton = new JButton("AD-001 Add Ship");
+//        JButton deleteShipButton = new JButton("AD-002 Delete Ship");
+//        JButton viewShipButton = new JButton("AD-003 View Ship");
+//        JButton modifyShipButton = new JButton("AD-004 Modify Ship");
+//        JButton addRouteButton = new JButton("AD-005 Add Route");
+//        JButton deleteRouteButton = new JButton("AD-006 Delete Route");
+//        JButton viewRouteButton = new JButton("AD-007 View Route");
+//        JButton modifyRouteButton = new JButton("AD-008 Modify Route");
+//        JButton addScheduleButton = new JButton("AD-009 Add Schedule");
+//        JButton deleteScheduleButton = new JButton("AD-010 Delete Schedule");
+//        JButton viewScheduleButton = new JButton("AD-011 View Schedule");
+//        JButton modifyScheduleButton = new JButton("AD-012 Modify Schedule");
+//        JButton viewPassengersButton = new JButton("AD-013 View Passenger");
+//
+//        // Add all buttons to the frame
+//        frame.add(addShipButton);
+//        frame.add(deleteShipButton);
+//        frame.add(viewShipButton);
+//        frame.add(modifyShipButton);
+//        frame.add(addRouteButton);
+//        frame.add(deleteRouteButton);
+//        frame.add(viewRouteButton);
+//        frame.add(modifyRouteButton);
+//        frame.add(addScheduleButton);
+//        frame.add(deleteScheduleButton);
+//        frame.add(viewScheduleButton);
+//        frame.add(modifyScheduleButton);
+//        frame.add(viewPassengersButton);
+//
+//        // Set up action listeners for each button
+//        addShipButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                addShipDetails();
+//            }
+//        });
+//
+//        deleteShipButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                deleteShipDetails();
+//            }
+//        });
+//
+//        viewShipButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                viewShipDetails();
+//            }
+//        });
+//
+//        modifyShipButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                modifyShipDetails();
+//            }
+//        });
+//
+//        addRouteButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                addRouteDetails();
+//            }
+//        });
+//
+//        deleteRouteButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                deleteRouteDetails();
+//            }
+//        });
+//
+//        viewRouteButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                viewRouteDetails();
+//            }
+//        });
+//
+//        modifyRouteButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                modifyRouteDetails();
+//            }
+//        });
+//
+//        addScheduleButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                addScheduleDetails();
+//            }
+//        });
+//
+//        deleteScheduleButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                deleteScheduleDetails();
+//            }
+//        });
+//
+//        viewScheduleButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                viewScheduleDetails();
+//            }
+//        });
+//
+//        modifyScheduleButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                modifyScheduleDetails();
+//            }
+//        });
+//
+////        viewPassengersButton.addActionListener(new ActionListener() {
+////            @Override
+////            public void actionPerformed(ActionEvent e) {
+////                viewPassengers();
+////            }
+////        });
+//
+//        frame.setVisible(true);
+//    }
+//
+//    // Example method for adding ship details
+//    private static void addShipDetails() {
+//        String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+//        String shipName = JOptionPane.showInputDialog("Enter Ship Name:");
+//        int seatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Seating Capacity:"));
+//        int reservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter Reservation Capacity:"));
+//
+//        ShipBean shipBean = new ShipBean();
+//        shipBean.setShipID(shipID);
+//        shipBean.setShipName(shipName);
+//        shipBean.setSeatingCapacity(seatingCapacity);
+//        shipBean.setReservationCapacity(reservationCapacity);
+//
+//        String result = adminDao.addShip(shipBean);
+//        JOptionPane.showMessageDialog(null, result);
+//
+//        // Check in MySQL after adding
+//        viewShipDetails();
+//    }
+//
+//    // Method to delete ship details
+//    private static void deleteShipDetails() {
+//        String shipID = JOptionPane.showInputDialog("Enter Ship ID to delete:");
+//        ArrayList<String> shipIds = new ArrayList<>();
+//        shipIds.add(shipID);
+//
+//        int count = adminDao.removeShip(shipIds);
+//        if (count > 0) {
+//            JOptionPane.showMessageDialog(null, "Ship deleted successfully.");
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Failed to delete ship.");
+//        }
+//
+//        // Check in MySQL after deleting
+//        viewShipDetails();
+//    }
+//
+//    // Method to view ship details
+//    private static void viewShipDetails() {
+//        // Retrieve and show all ships
+//        ArrayList<ShipBean> ships = adminDao.viewByAllShips();
+//        StringBuilder shipDetails = new StringBuilder();
+//        for (ShipBean ship : ships) {
+//            shipDetails.append(ship.toString()).append("\n");
+//        }
+//
+//        if (shipDetails.length() > 0) {
+//            JOptionPane.showMessageDialog(null, "Ship Details: \n" + shipDetails);
+//        } else {
+//            JOptionPane.showMessageDialog(null, "No ships available.");
+//        }
+//    }
+// // Modify ship details method without using JFrame
+//    private static void modifyShipDetails() {
+//        // Prompt the admin for the Ship ID to modify
+//        String shipID = JOptionPane.showInputDialog("Enter Ship ID to modify:");
+//        if (shipID == null || shipID.trim().isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Ship ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        // Check if the ship exists in the database
+//        String checkQuery = "SELECT * FROM ship WHERE shipID = ?";
+//        try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+//            ps.setString(1, shipID);
+//            ResultSet rs = ps.executeQuery();
+//
+//            // If the ship exists, prompt the admin to modify the details
+//            if (rs.next()) {
+//                // Prompt for new Ship Name
+//                String newShipName = JOptionPane.showInputDialog("Enter new Ship Name:");
+//                if (newShipName == null || newShipName.trim().isEmpty()) {
+//                    JOptionPane.showMessageDialog(null, "Ship Name cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//
+//                // Prompt for new Seating Capacity
+//                int newSeatingCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Seating Capacity:"));
+//                // Prompt for new Reservation Capacity
+//                int newReservationCapacity = Integer.parseInt(JOptionPane.showInputDialog("Enter new Reservation Capacity:"));
+//
+//                // SQL query to update the ship details
+//                String updateQuery = "UPDATE ship SET shipName = ?, seatingCapacity = ?, reservationCapacity = ? WHERE shipID = ?";
+//                try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+//                    updatePs.setString(1, newShipName);
+//                    updatePs.setInt(2, newSeatingCapacity);
+//                    updatePs.setInt(3, newReservationCapacity);
+//                    updatePs.setString(4, shipID);
+//
+//                    int rowsAffected = updatePs.executeUpdate();
+//                    if (rowsAffected > 0) {
+//                        JOptionPane.showMessageDialog(null, "Ship details updated successfully!");
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "Failed to update ship details.", "Error", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                } catch (SQLException e) {
+//                    JOptionPane.showMessageDialog(null, "Error updating ship details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(null, "No ship found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, "Error checking ship ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+//
+//   //add route details
+//   
+//    private static void addRouteDetails() {
+//        String routeID = JOptionPane.showInputDialog("Enter Route ID:");
+//        String source = JOptionPane.showInputDialog("Enter Source:");
+//        String destination = JOptionPane.showInputDialog("Enter Destination:");
+//        String travelDuration = JOptionPane.showInputDialog("Enter Travel Duration:");
+//        double fare = Double.parseDouble(JOptionPane.showInputDialog("Enter Fare:"));
+//       
+//
+//        RouteBean routeBean = new RouteBean();
+//        routeBean.setRouteID(routeID);
+//        routeBean.setSource(source);
+//        routeBean.setDestination(destination);
+//        routeBean.setTravelDuration(travelDuration);
+//        routeBean.setFare(fare);
+//
+//        String result = adminDao.addRoute(routeBean);
+//        JOptionPane.showMessageDialog(null, result);
+//
+//        // Check in MySQL after adding
+//        viewRouteDetails();
+//    }
+//    // View route details from the database
+//    private static void viewRouteDetails() {
+//        // Retrieve and show all ships
+//        ArrayList<RouteBean> routes = adminDao.viewByAllRoute();
+//        StringBuilder routeDetails = new StringBuilder();
+//        for (RouteBean route : routes) {
+//            routeDetails.append(route.toString()).append("\n");
+//        }
+//
+//        if (routeDetails.length() > 0) {
+//            JOptionPane.showMessageDialog(null, "Route Details: \n" + routeDetails);
+//        } else {
+//            JOptionPane.showMessageDialog(null, "No routes available.");
+//        }
+//    }
+// 
+//    // Method to delete ship details
+//    
+// private static void deleteRouteDetails() {
+//     String routeID = JOptionPane.showInputDialog("Enter Route ID to delete:");
+//     ArrayList<String> routeIds = new ArrayList<>();
+//     routeIds.add(routeID);
+//
+//     int count = adminDao.removeRoute(routeIds);
+//     if (count > 0) {
+//         JOptionPane.showMessageDialog(null, "Route deleted successfully.");
+//     } else {
+//         JOptionPane.showMessageDialog(null, "Failed to delete route.");
+//     }
+//
+//     // Check in MySQL after deleting
+//     viewRouteDetails();
+// }
+// 
+////Modify route details method without using JFrame
+//private static void modifyRouteDetails() {
+//  // Prompt the admin for the Route ID to modify
+//  String routeID = JOptionPane.showInputDialog("Enter Route ID to modify:");
+//  if (routeID == null || routeID.trim().isEmpty()) {
+//      JOptionPane.showMessageDialog(null, "Route ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//      return;
+//  }
+//
+//  // Check if the route exists in the database
+//  String checkQuery = "SELECT * FROM route WHERE routeID = ?";
+//  try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+//      ps.setString(1, routeID);
+//      ResultSet rs = ps.executeQuery();
+//
+//      // If the route exists, prompt the admin to modify the details
+//      if (rs.next()) {
+//          // Prompt for new source
+//          String newSource = JOptionPane.showInputDialog("Enter new Source:");
+//          if (newSource == null || newSource.trim().isEmpty()) {
+//              JOptionPane.showMessageDialog(null, "Source cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//              return;
+//          }
+//
+//          // Prompt for new destination
+//          String newDestination = JOptionPane.showInputDialog("Enter new Destination:");
+//          if (newDestination == null || newDestination.trim().isEmpty()) {
+//              JOptionPane.showMessageDialog(null, "Destination cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//              return;
+//          }
+//
+//          // Prompt for new travel duration
+//          String newTravelDuration = JOptionPane.showInputDialog("Enter new Travel Duration:");
+//          if (newTravelDuration == null || newTravelDuration.trim().isEmpty()) {
+//              JOptionPane.showMessageDialog(null, "Travel Duration cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//              return;
+//          }
+//
+//          // Prompt for new fare
+//          double newFare = Double.parseDouble(JOptionPane.showInputDialog("Enter new Fare:"));
+//
+//          // SQL query to update the route details
+//          String updateQuery = "UPDATE route SET source = ?, destination = ?, travelDuration = ?, fare = ? WHERE routeID = ?";
+//          try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+//              updatePs.setString(1, newSource);
+//              updatePs.setString(2, newDestination);
+//              updatePs.setString(3, newTravelDuration);
+//              updatePs.setDouble(4, newFare);
+//              updatePs.setString(5, routeID);
+//
+//              int rowsAffected = updatePs.executeUpdate();
+//              if (rowsAffected > 0) {
+//                  JOptionPane.showMessageDialog(null, "Route details updated successfully!");
+//              } else {
+//                  JOptionPane.showMessageDialog(null, "Failed to update route details.", "Error", JOptionPane.ERROR_MESSAGE);
+//              }
+//          } catch (SQLException e) {
+//              JOptionPane.showMessageDialog(null, "Error updating route details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//          }
+//      } else {
+//          JOptionPane.showMessageDialog(null, "No route found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+//      }
+//  } catch (SQLException e) {
+//      JOptionPane.showMessageDialog(null, "Error checking route ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//  }
+//}
+//  //Example method for adding schedule details
+//   private static void addScheduleDetails() {
+//   // Prompt the admin for the necessary schedule details
+//    String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID:");
+//    String shipID = JOptionPane.showInputDialog("Enter Ship ID:");
+//    String routeID = JOptionPane.showInputDialog("Enter Route ID:");
+//    String startDate = JOptionPane.showInputDialog("Enter Start Date (YYYY-MM-DD):");
+//
+//    // Create a new ScheduleBean and set the values
+//    ScheduleBean scheduleBean = new ScheduleBean();
+//    scheduleBean.setScheduleID(scheduleID);
+//    scheduleBean.setShipID(shipID);
+//    scheduleBean.setRouteID(routeID);
+//    scheduleBean.setStartDate(startDate);
+//
+//    //  Add the schedule using the DAO method
+//     String result = adminDao.addSchedule(scheduleBean);
+//     JOptionPane.showMessageDialog(null, result);
+//
+// // After adding, check in MySQL by displaying the schedule details
+//     viewScheduleDetails();
+//}
+////Method to view schedule details
+//    private static void viewScheduleDetails() {
+// // Retrieve and show all schedules
+//     ArrayList<ScheduleBean> schedules = adminDao.viewByAllSchedule();
+//     StringBuilder scheduleDetails = new StringBuilder();
+//     for (ScheduleBean schedule : schedules) {
+//     scheduleDetails.append(schedule.toString()).append("\n");
+// }
+//
+// // Show the schedule details or a message if no schedules are available
+//     if (scheduleDetails.length() > 0) {
+//     JOptionPane.showMessageDialog(null, "Schedule Details: \n" + scheduleDetails);
+//   } else {
+//     JOptionPane.showMessageDialog(null, "No schedules available.");
+//  }
+//}
+// // Method to delete schedule details
+//    private static void deleteScheduleDetails() {
+//        // Prompt the admin for the Schedule ID to delete
+//        String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID to delete:");
+//
+//        // Create an ArrayList to hold the schedule ID(s)
+//        ArrayList<String> scheduleIds = new ArrayList<>();
+//        scheduleIds.add(scheduleID);
+//
+//        // Call the DAO method to delete the schedule
+//        int count = adminDao.removeSchedule(scheduleIds);
+//        
+//        // Show success or failure message
+//        if (count > 0) {
+//            JOptionPane.showMessageDialog(null, "Schedule deleted successfully.");
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Failed to delete schedule.");
+//        }
+//
+//        // Check in MySQL after deleting by viewing the updated schedule details
+//        viewScheduleDetails();
+//    }
+//
+// // Method to modify schedule details
+//    private static void modifyScheduleDetails() {
+//        // Prompt the admin for the Schedule ID to modify
+//        String scheduleID = JOptionPane.showInputDialog("Enter Schedule ID to modify:");
+//        if (scheduleID == null || scheduleID.trim().isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Schedule ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        // Check if the schedule exists in the database
+//        String checkQuery = "SELECT * FROM schedule WHERE scheduleID = ?";
+//        try (PreparedStatement ps = DB.getCon().prepareStatement(checkQuery)) {
+//            ps.setString(1, scheduleID);
+//            ResultSet rs = ps.executeQuery();
+//
+//            // If the schedule exists, prompt the admin to modify the details
+//            if (rs.next()) {
+//                // Prompt for new Ship ID (you can also validate this shipID if needed)
+//                String newShipID = JOptionPane.showInputDialog("Enter new Ship ID:");
+//                if (newShipID == null || newShipID.trim().isEmpty()) {
+//                    JOptionPane.showMessageDialog(null, "Ship ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//
+//                // Prompt for new Route ID
+//                String newRouteID = JOptionPane.showInputDialog("Enter new Route ID:");
+//                if (newRouteID == null || newRouteID.trim().isEmpty()) {
+//                    JOptionPane.showMessageDialog(null, "Route ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//
+//                // Prompt for new Start Date
+//                String newStartDate = JOptionPane.showInputDialog("Enter new Start Date (YYYY-MM-DD):");
+//                if (newStartDate == null || newStartDate.trim().isEmpty()) {
+//                    JOptionPane.showMessageDialog(null, "Start Date cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//
+//                // SQL query to update the schedule details
+//                String updateQuery = "UPDATE schedule SET shipID = ?, routeID = ?, startDate = ? WHERE scheduleID = ?";
+//                try (PreparedStatement updatePs = DB.getCon().prepareStatement(updateQuery)) {
+//                    updatePs.setString(1, newShipID);
+//                    updatePs.setString(2, newRouteID);
+//                    updatePs.setString(3, newStartDate);
+//                    updatePs.setString(4, scheduleID);
+//
+//                    int rowsAffected = updatePs.executeUpdate();
+//                    if (rowsAffected > 0) {
+//                        JOptionPane.showMessageDialog(null, "Schedule details updated successfully!");
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "Failed to update schedule details.", "Error", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                } catch (SQLException e) {
+//                    JOptionPane.showMessageDialog(null, "Error updating schedule details: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(null, "No schedule found with the given ID.", "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, "Error checking schedule ID: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+}
+
+
